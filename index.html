@@ -174,6 +174,29 @@
       overflow: hidden;
       position: relative;
     }
+    .map-ping {
+      position: absolute;
+      top: 38%; left: 65%;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      transform: translate(-50%, -50%);
+    }
+    .map-ping::before,
+    .map-ping::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      animation: ping-wave 2s ease-out infinite;
+    }
+    .map-ping::after { animation-delay: 1s; }
+    @keyframes ping-wave {
+      0%   { transform: scale(1);  opacity: 0.8; }
+      100% { transform: scale(4);  opacity: 0; }
+    }
     .reseau-wrap::before {
       content: '// RÉSEAU DES AGENTS CVB';
       display: block;
@@ -286,13 +309,17 @@
     }
     .t-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-dim); box-shadow: 0 0 5px var(--green-dim); }
     .t-label { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--text-dim); }
-    .t-line { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid rgba(26,61,26,0.4); font-size: 0.8rem; }
+    .t-line { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid rgba(26,61,26,0.4); font-size: 0.8rem; opacity: 0; transform: translateX(-8px); }
+    .t-line.t-show { opacity: 1; transform: none; transition: opacity 0.2s ease, transform 0.2s ease; }
     .t-key { color: var(--text-dim); }
     .t-val { font-weight: 700; letter-spacing: 0.1em; padding: 0.15rem 0.5rem; }
     .val-ok { color: var(--green); background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.3); text-shadow: 0 0 5px var(--green); }
     .val-red { color: var(--text-dim); background: var(--anthracite); letter-spacing: 0.25em; }
-    .t-verdict { margin-top: 1.25rem; text-align: center; font-size: 1.25rem; font-weight: 700; letter-spacing: 0.4em; color: var(--green); text-shadow: 0 0 12px var(--green); animation: blink-v 3s ease-in-out infinite; }
+    .t-verdict { margin-top: 1.25rem; text-align: center; font-size: 1.25rem; font-weight: 700; letter-spacing: 0.4em; color: var(--green); text-shadow: 0 0 12px var(--green); opacity: 0; }
+    .t-verdict.t-show { opacity: 1; transition: opacity 0.4s ease; animation: blink-v 3s ease-in-out infinite 0.4s; }
     @keyframes blink-v { 0%, 90%, 100% { opacity: 1; } 95% { opacity: 0.3; } }
+    .t-cursor::after { content: '█'; color: var(--green); opacity: 0; animation: blink-cursor 0.6s step-end infinite; }
+    @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     /* ── ARCHIVES ── */
     #archives { background: var(--bg2); }
@@ -776,6 +803,59 @@
   }, { threshold: 0.3 });
   const ms = document.getElementById('mission');
   if (ms) observer.observe(ms);
+
+  // ── TERMINAL TYPING ──────────────────────────────────────────────
+  const termObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const lines   = e.target.querySelectorAll('.t-line');
+      const verdict = e.target.querySelector('.t-verdict');
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add('t-show');
+          // curseur clignotant sur la dernière ligne active
+          lines.forEach(l => l.classList.remove('t-cursor'));
+          if (i < lines.length - 1) line.classList.add('t-cursor');
+        }, 200 + i * 160);
+      });
+      if (verdict) setTimeout(() => verdict.classList.add('t-show'), 200 + lines.length * 160 + 200);
+      termObs.disconnect();
+    });
+  }, { threshold: 0.4 });
+  const term = document.querySelector('.terminal-mini');
+  if (term) termObs.observe(term);
+
+  // ── GLITCH CVB ───────────────────────────────────────────────────
+  const cvbTitle = document.querySelector('.hero-title');
+  function glitch(el) {
+    const chars = '!<>-_\\/[]{}—=+*^?#░▒▓';
+    const orig  = el.dataset.orig || el.textContent;
+    el.dataset.orig = orig;
+    let iter = 0;
+    const iv = setInterval(() => {
+      el.textContent = orig.split('').map((c, i) => {
+        if (i < iter) return orig[i];
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join('');
+      if (iter >= orig.length) { el.textContent = orig; clearInterval(iv); }
+      iter += 0.4;
+    }, 40);
+  }
+  if (cvbTitle) {
+    // glitch au chargement
+    setTimeout(() => glitch(cvbTitle), 600);
+    // glitch au hover
+    cvbTitle.addEventListener('mouseenter', () => glitch(cvbTitle));
+  }
+
+  // ── PING MONTPELLIER ─────────────────────────────────────────────
+  const reseauWrap = document.querySelector('.reseau-wrap');
+  if (reseauWrap) {
+    const ping = document.createElement('span');
+    ping.className = 'map-ping';
+    reseauWrap.style.position = 'relative';
+    reseauWrap.appendChild(ping);
+  }
 </script>
 
 </body>
