@@ -137,6 +137,12 @@
     .hero-slogan { font-size: clamp(1rem, 2.5vw, 1.3rem); font-style: italic; margin-bottom: 2.5rem; opacity: 0.85; }
     .hero-slogan::before { content: '"'; }
     .hero-slogan::after { content: '"'; }
+    .tw-cursor { display: inline-block; color: var(--green); font-style: normal; animation: blink-cursor 0.7s step-end infinite; }
+    @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); }
+    .reveal.revealed { opacity: 1; transform: none; transition: opacity 0.65s ease, transform 0.65s ease; }
     .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
     /* ── MISSION ── */
@@ -828,6 +834,43 @@
 
   const term = document.querySelector('.terminal-mini');
   if (term) termObs.observe(term);
+
+  // ── TYPEWRITER SLOGAN ────────────────────────────────────────────
+  const slogan = document.querySelector('.hero-slogan');
+  if (slogan) {
+    const text = slogan.textContent.trim();
+    slogan.textContent = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    cursor.textContent = '|';
+    slogan.appendChild(cursor);
+    let i = 0;
+    const type = () => {
+      if (i < text.length) {
+        slogan.insertBefore(document.createTextNode(text[i]), cursor);
+        i++;
+        setTimeout(type, i === 1 ? 300 : 42);
+      } else {
+        setTimeout(() => cursor.remove(), 1800);
+      }
+    };
+    setTimeout(type, 1000);
+  }
+
+  // ── SCROLL REVEAL ─────────────────────────────────────────────────
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('revealed');
+      revealObs.unobserve(e.target);
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('section:not(#hero) .container').forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = `${i * 0.05}s`;
+    revealObs.observe(el);
+  });
 
   // ── GLITCH CVB ───────────────────────────────────────────────────
   const cvbTitle = document.querySelector('.hero-title');
