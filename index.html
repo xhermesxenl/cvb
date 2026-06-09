@@ -59,7 +59,9 @@
     section { padding: 80px 20px; }
     .container { max-width: 1100px; margin: 0 auto; }
 
-    img { display: block; max-width: 100%; }
+    img { display: block; max-width: 100%; height: auto; }
+    picture { display: block; }
+    picture img { width: 100%; height: auto; }
 
     .btn {
       display: inline-block;
@@ -115,12 +117,15 @@
     .hero-content { position: relative; z-index: 1; }
     .hero-logo {
       width: 220px; height: 220px;
-      object-fit: cover; object-position: 30% 80%;
+      object-fit: cover; object-position: center 30%;
       border-radius: 50%;
       border: 2px solid var(--green-dim);
       box-shadow: 0 0 20px var(--green-dim), 0 0 60px rgba(0,255,65,0.15);
       margin: 0 auto 2rem;
       animation: pulse-logo 4s ease-in-out infinite;
+    }
+    @media (max-width: 600px) {
+      .hero-logo { width: 180px; height: 180px; }
     }
     @keyframes pulse-logo {
       0%, 100% { box-shadow: 0 0 20px var(--green-dim), 0 0 60px rgba(0,255,65,0.15); }
@@ -383,7 +388,8 @@
       opacity: 0.4; transition: opacity 0.4s; cursor: default;
     }
     .dgccrf-wrap:hover { opacity: 1; }
-    .dgccrf-img { width: 200px; flex-shrink: 0; border: 1px solid var(--border); }
+    .dgccrf-img { width: 200px; flex-shrink: 0; border: 1px solid var(--border); display: block; }
+    .dgccrf-img img { width: 100%; height: auto; display: block; }
     .dgccrf-text-block { flex: 1; }
     .dgccrf-tag { font-size: 0.6rem; letter-spacing: 0.3em; color: var(--green-dim); margin-bottom: 0.5rem; display: block; }
     .dgccrf-text { font-size: 0.85rem; color: var(--text-dim); letter-spacing: 0.05em; }
@@ -419,7 +425,10 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-content">
-    <img src="photo_5855069060985458138_w.jpg" alt="Écusson CVB" class="hero-logo" />
+    <picture>
+      <source media="(max-width: 600px)" srcset="img/logo_sm.webp">
+      <img src="img/logo_lg.webp" alt="Écusson CVB" class="hero-logo" width="400" height="400" />
+    </picture>
     <p class="hero-tag">// Division Brassicole — Unité de Terrain //</p>
     <h1 class="hero-title glow">CVB</h1>
     <p class="hero-subtitle">Comité de Validation de la Bière</p>
@@ -463,7 +472,11 @@
         </div>
       </div>
       <div class="reseau-wrap">
-        <img src="assets/reseau_agents.png" alt="Réseau des agents CVB — Montpellier France" />
+        <picture>
+          <source media="(max-width: 600px)" srcset="img/reseau_sm.webp">
+          <source media="(max-width: 900px)" srcset="img/reseau_md.webp">
+          <img src="img/reseau_lg.webp" alt="Réseau des agents CVB — Montpellier France" loading="lazy" width="503" height="380">
+        </picture>
       </div>
     </div>
   </div>
@@ -475,7 +488,11 @@
     <p class="section-title">// PROCÉDURE STANDARD CVB //</p>
     <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:1.5rem;">Protocole de Validation</h2>
     <div class="icons-banner">
-      <img src="assets/icons_strip.png" alt="Icônes du protocole CVB" />
+      <picture>
+        <source media="(max-width: 600px)" srcset="img/icons_sm.webp">
+        <source media="(max-width: 900px)" srcset="img/icons_md.webp">
+        <img src="img/icons_lg.webp" alt="Icônes du protocole CVB" loading="lazy" width="1000" height="123">
+      </picture>
     </div>
     <div class="steps-grid">
       <div class="step-card">
@@ -552,7 +569,11 @@
         </div>
       </div>
       <div class="carte-agent-wrap">
-        <img src="assets/carte_agent.png" alt="Carte d'agent CVB — Beer Validation Division" />
+        <picture>
+          <source media="(max-width: 600px)" srcset="img/carte_agent_sm.webp">
+          <source media="(max-width: 900px)" srcset="img/carte_agent_md.webp">
+          <img src="img/carte_agent_lg.webp" alt="Carte d'agent CVB — Beer Validation Division" loading="lazy" width="596" height="300">
+        </picture>
       </div>
     </div>
   </div>
@@ -565,7 +586,11 @@
     <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:2rem;">Rapport de mission</h2>
     <div class="rapport-layout">
       <div class="rapport-img-wrap">
-        <img src="assets/rapport_v2.png" alt="Rapport d'inspection CVB-013 — Le Houblon Heureux" />
+        <picture>
+          <source media="(max-width: 600px)" srcset="img/rapport_sm.webp">
+          <source media="(max-width: 900px)" srcset="img/rapport_md.webp">
+          <img src="img/rapport_lg.webp" alt="Rapport d'inspection CVB-013 — Le Houblon Heureux" loading="lazy" width="482" height="414">
+        </picture>
       </div>
       <div class="rapport-side">
         <div class="terminal-mini">
@@ -653,7 +678,11 @@
     <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:2rem;">Prochaine Mission</h2>
     <div class="mission-next-layout">
       <div class="mission-img-wrap">
-        <img src="assets/mission_card.png" alt="Mission CVB-014 — Porh Ainc 09/06 19h00" />
+        <picture>
+          <source media="(max-width: 600px)" srcset="img/mission_card_sm.webp">
+          <source media="(max-width: 900px)" srcset="img/mission_card_md.webp">
+          <img src="img/mission_card_lg.webp" alt="Mission CVB-014 — Porh Ainc 09/06 19h00" loading="lazy" width="542" height="416">
+        </picture>
         <a href="https://maps.app.goo.gl/Na7yM8PZzg4vwaS26" target="_blank" rel="noopener" class="mission-map-btn">
           📍 &nbsp;Ouvrir dans Google Maps
         </a>
@@ -698,7 +727,10 @@
 <!-- DGCCRF EASTER EGG -->
 <section id="dgccrf">
   <div class="dgccrf-wrap">
-    <img src="assets/dgccrf_easter.png" alt="Cas pratique DGCCRF" class="dgccrf-img" />
+    <picture class="dgccrf-img">
+      <source media="(max-width: 600px)" srcset="img/dgccrf_sm.webp">
+      <img src="img/dgccrf_lg.webp" alt="Cas pratique DGCCRF" loading="lazy" width="230" height="224">
+    </picture>
     <div class="dgccrf-text-block">
       <span class="dgccrf-tag">// ANNEXE DGCCRF — DOCUMENT INTERNE NON DIFFUSABLE //</span>
       <p class="dgccrf-text">@Jay, est-ce que ça compte comme un cas pratique DGCCRF ?</p>
@@ -713,8 +745,14 @@
   <p style="font-size:0.75rem;color:var(--green-dim);letter-spacing:0.2em;font-style:italic;">In Hops We Trust</p>
   <div class="footer-sep"></div>
   <div class="footer-badges">
-    <img src="assets/badge_enlightened.png" alt="Enlightened" />
-    <img src="assets/badge_hops.png" alt="In Hops We Trust" />
+    <picture>
+      <source media="(max-width: 600px)" srcset="img/badge_enl_sm.webp">
+      <img src="img/badge_enl_lg.webp" alt="Enlightened" loading="lazy" width="130" height="119">
+    </picture>
+    <picture>
+      <source media="(max-width: 600px)" srcset="img/badge_hops_sm.webp">
+      <img src="img/badge_hops_lg.webp" alt="In Hops We Trust" loading="lazy" width="130" height="111">
+    </picture>
   </div>
   <div class="footer-sep"></div>
   <p style="font-size:0.7rem;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:1rem;">Est. 2026</p>
