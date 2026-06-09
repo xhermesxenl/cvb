@@ -835,28 +835,6 @@
   const term = document.querySelector('.terminal-mini');
   if (term) termObs.observe(term);
 
-  // ── TYPEWRITER SLOGAN ────────────────────────────────────────────
-  const slogan = document.querySelector('.hero-slogan');
-  if (slogan) {
-    const text = slogan.textContent.trim();
-    slogan.textContent = '';
-    const cursor = document.createElement('span');
-    cursor.className = 'tw-cursor';
-    cursor.textContent = '|';
-    slogan.appendChild(cursor);
-    let i = 0;
-    const type = () => {
-      if (i < text.length) {
-        slogan.insertBefore(document.createTextNode(text[i]), cursor);
-        i++;
-        setTimeout(type, i === 1 ? 300 : 42);
-      } else {
-        setTimeout(() => cursor.remove(), 1800);
-      }
-    };
-    setTimeout(type, 1000);
-  }
-
   // ── SCROLL REVEAL ─────────────────────────────────────────────────
   const revealObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -866,13 +844,53 @@
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
+  // Sections hors hero
   document.querySelectorAll('section:not(#hero) .container').forEach((el, i) => {
     el.classList.add('reveal');
     el.style.transitionDelay = `${i * 0.05}s`;
     revealObs.observe(el);
   });
 
-  // ── GLITCH CVB ───────────────────────────────────────────────────
+  // Hero : chaque élément en staggered
+  const heroEls = document.querySelectorAll('.hero-content > *');
+  heroEls.forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = `${0.1 + i * 0.13}s`;
+    revealObs.observe(el);
+  });
+
+  // ── TYPEWRITER SLOGAN (déclenché au reveal) ───────────────────────
+  const slogan = document.querySelector('.hero-slogan');
+  if (slogan) {
+    const text = slogan.textContent.trim();
+    slogan.textContent = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    cursor.textContent = '|';
+    slogan.appendChild(cursor);
+    let typed = false;
+    const startType = () => {
+      if (typed) return;
+      typed = true;
+      let i = 0;
+      const type = () => {
+        if (i < text.length) {
+          slogan.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          setTimeout(type, 42);
+        } else {
+          setTimeout(() => cursor.remove(), 1800);
+        }
+      };
+      setTimeout(type, 200);
+    };
+    const sloganObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { startType(); sloganObs.disconnect(); } });
+    }, { threshold: 0.5 });
+    sloganObs.observe(slogan);
+  }
+
+  // ── GLITCH CVB (déclenché au reveal) ─────────────────────────────
   const cvbTitle = document.querySelector('.hero-title');
   function glitch(el) {
     const chars = '!<>-_\\/[]{}—=+*^?#░▒▓';
@@ -889,9 +907,10 @@
     }, 40);
   }
   if (cvbTitle) {
-    // glitch au chargement
-    setTimeout(() => glitch(cvbTitle), 600);
-    // glitch au hover
+    const glitchObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { setTimeout(() => glitch(cvbTitle), 300); glitchObs.disconnect(); } });
+    }, { threshold: 0.5 });
+    glitchObs.observe(cvbTitle);
     cvbTitle.addEventListener('mouseenter', () => glitch(cvbTitle));
   }
 
