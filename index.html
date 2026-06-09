@@ -192,11 +192,15 @@
       margin-bottom: 2.5rem;
       border: 1px solid var(--border);
       box-shadow: 0 0 20px rgba(0,255,65,0.06);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
     }
-    .icons-banner picture { display: block; min-width: 600px; }
-    .icons-banner img { width: 100%; height: auto; min-width: 600px; }
+    @media (max-width: 600px) {
+      .icons-banner {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .icons-banner picture { display: block; min-width: 560px; }
+      .icons-banner img { width: 560px; height: auto; }
+    }
 
     .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
     .step-card {
