@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CVB — Comité de Validation de la Bière</title>
+  <meta name="description" content="Organisation indépendante de validation brassicole. Nous ne buvons pas, nous validons." />
+  <style>
+    :root {
+      --green: #00ff41;
+      --green-dim: #00cc33;
+      --green-dark: #003d0f;
+      --bg: #050a05;
+      --bg2: #0a120a;
+      --bg3: #0f1a0f;
+      --text: #d4e8d4;
+      --text-dim: #7aab7a;
+      --border: #1a3d1a;
+      --anthracite: #1c1c1c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCANLINES OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,255,65,0.015) 2px,
+        rgba(0,255,65,0.015) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: 0.1em; }
+
+    .glow {
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green), 0 0 20px var(--green-dim), 0 0 40px var(--green-dark);
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--green);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    section { padding: 80px 20px; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(5,10,5,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+
+    nav .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green); text-shadow: 0 0 6px var(--green); }
+
+    @media (max-width: 600px) { .nav-links { display: none; } }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding-top: 80px;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,255,65,0.06) 0%, transparent 70%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L55 17.5 L55 42.5 L30 55 L5 42.5 L5 17.5Z' fill='none' stroke='rgba(0,255,65,0.04)' stroke-width='1'/%3E%3C/svg%3E") repeat;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-logo {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      object-position: 30% 80%;
+      border-radius: 50%;
+      border: 2px solid var(--green-dim);
+      box-shadow: 0 0 20px var(--green-dim), 0 0 60px rgba(0,255,65,0.15), inset 0 0 20px rgba(0,0,0,0.5);
+      margin-bottom: 2rem;
+      animation: pulse-logo 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-logo {
+      0%, 100% { box-shadow: 0 0 20px var(--green-dim), 0 0 60px rgba(0,255,65,0.15); }
+      50% { box-shadow: 0 0 30px var(--green), 0 0 80px rgba(0,255,65,0.25); }
+    }
+
+    .hero-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(4rem, 12vw, 8rem);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-slogan {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      opacity: 0.85;
+    }
+
+    .hero-slogan::before { content: '"'; }
+    .hero-slogan::after { content: '"'; }
+
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--bg);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #00ff80;
+      box-shadow: 0 0 20px var(--green);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0,255,65,0.1);
+      box-shadow: 0 0 15px rgba(0,255,65,0.3);
+    }
+
+    /* ─── MISSION ─── */
+    #mission { background: var(--bg2); }
+
+    .mission-text {
+      font-size: 1.1rem;
+      color: var(--text);
+      max-width: 700px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+    }
+
+    .stat-card:hover {
+      border-color: var(--green-dim);
+      box-shadow: 0 0 20px rgba(0,255,65,0.1);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    /* ─── PROTOCOLE ─── */
+    #protocole { background: var(--bg); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .step-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      position: relative;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .step-card:hover {
+      border-color: var(--green-dim);
+      background: var(--bg3);
+      box-shadow: 0 0 25px rgba(0,255,65,0.08);
+      transform: translateY(-3px);
+    }
+
+    .step-number {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-icon {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-size: 1.5rem;
+      opacity: 0.4;
+    }
+
+    /* ─── GRADES ─── */
+    #grades { background: var(--bg2); }
+
+    .grades-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 700px;
+    }
+
+    .grade-item {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .grade-item:hover {
+      border-color: var(--green-dim);
+      box-shadow: 0 0 15px rgba(0,255,65,0.1);
+    }
+
+    .grade-rank {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      min-width: 80px;
+    }
+
+    .grade-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grade-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-dark), var(--green));
+      box-shadow: 0 0 8px var(--green-dim);
+    }
+
+    .grade-name {
+      font-size: 0.9rem;
+      color: var(--text);
+      min-width: 280px;
+    }
+
+    @media (max-width: 600px) {
+      .grade-item { flex-direction: column; align-items: flex-start; }
+      .grade-name { min-width: unset; }
+    }
+
+    /* ─── RAPPORT ─── */
+    #rapport { background: var(--bg); }
+
+    .terminal {
+      background: #020802;
+      border: 1px solid var(--green-dim);
+      box-shadow: 0 0 30px rgba(0,255,65,0.1), inset 0 0 30px rgba(0,0,0,0.5);
+      padding: 2rem;
+      max-width: 700px;
+      position: relative;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--green-dim);
+      box-shadow: 0 0 6px var(--green-dim);
+    }
+
+    .terminal-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+    }
+
+    .terminal-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(26,61,26,0.4);
+      font-size: 0.85rem;
+    }
+
+    .terminal-key { color: var(--text-dim); letter-spacing: 0.1em; }
+
+    .terminal-val {
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 0.2rem 0.6rem;
+    }
+
+    .val-ok {
+      color: var(--green);
+      background: rgba(0,255,65,0.08);
+      border: 1px solid rgba(0,255,65,0.3);
+      text-shadow: 0 0 6px var(--green);
+    }
+
+    .val-redacted {
+      color: var(--text-dim);
+      background: var(--anthracite);
+      letter-spacing: 0.3em;
+    }
+
+    .terminal-verdict {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      color: var(--green);
+      text-shadow: 0 0 15px var(--green), 0 0 30px var(--green-dim);
+      animation: blink-verdict 3s ease-in-out infinite;
+    }
+
+    @keyframes blink-verdict {
+      0%, 90%, 100% { opacity: 1; }
+      95% { opacity: 0.4; }
+    }
+
+    /* ─── ARCHIVES ─── */
+    #archives { background: var(--bg2); }
+
+    .archives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .archive-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .archive-card:hover {
+      border-color: var(--green-dim);
+      box-shadow: 0 0 20px rgba(0,255,65,0.08);
+      transform: translateY(-2px);
+    }
+
+    .archive-id {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .archive-title {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .archive-status {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }
+
+    /* ─── PROCHAINE MISSION ─── */
+    #mission-next { background: var(--bg); }
+
+    .mission-card {
+      background: var(--bg2);
+      border: 1px solid var(--green-dim);
+      box-shadow: 0 0 40px rgba(0,255,65,0.08), 0 0 80px rgba(0,255,65,0.04);
+      padding: 2.5rem;
+      max-width: 700px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(0,255,65,0.012) 40px,
+        rgba(0,255,65,0.012) 41px
+      );
+      pointer-events: none;
+    }
+
+    .mission-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-badge {
+      background: var(--green);
+      color: var(--bg);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      padding: 0.3rem 0.75rem;
+    }
+
+    .mission-status-badge {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 0.3rem 0.75rem;
+      animation: pulse-border 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 10px rgba(0,255,65,0.4); }
+    }
+
+    .mission-card-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 0.25rem;
+    }
+
+    .mission-card-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .mission-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .meta-icon { font-size: 1.1rem; }
+
+    .meta-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .meta-value {
+      font-size: 0.9rem;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .mission-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      padding: 1rem 1.25rem;
+      background: rgba(0,0,0,0.3);
+      border-left: 2px solid var(--green-dim);
+    }
+
+    /* ─── DGCCRF EASTER EGG ─── */
+    #dgccrf { background: var(--bg2); padding: 40px 20px; }
+
+    .dgccrf-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      opacity: 0.45;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      transition: opacity 0.4s;
+      cursor: default;
+    }
+
+    .dgccrf-inner:hover { opacity: 1; }
+
+    .dgccrf-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--green-dim);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-sep {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+      margin: 1.25rem auto;
+    }
+
+    .footer-mentions {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      opacity: 0.6;
+    }
+
+    /* ─── COUNTER ANIMATION ─── */
+    .stat-number[data-target] {
+      transition: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">CVB</span>
+    <ul class="nav-links">
+      <li><a href="#mission">Mission</a></li>
+      <li><a href="#protocole">Protocole</a></li>
+      <li><a href="#grades">Grades</a></li>
+      <li><a href="#rapport">Rapports</a></li>
+      <li><a href="#mission-next">Prochaine mission</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <img src="photo_5855069060985458138_w.jpg" alt="Écusson CVB" class="hero-logo" />
+    <p class="hero-tag">// Division Brassicole — Unité de Terrain //</p>
+    <h1 class="hero-title glow">CVB</h1>
+    <p class="hero-subtitle">Comité de Validation de la Bière</p>
+    <p class="hero-slogan">Nous ne buvons pas, nous validons.</p>
+    <div class="hero-btns">
+      <a href="#rapport" class="btn btn-primary">Consulter les rapports</a>
+      <a href="#mission-next" class="btn btn-outline">Rejoindre la mission</a>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="container">
+    <p class="section-title">// DIRECTIVE OPÉRATIONNELLE //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:1.5rem;">Mission</h2>
+    <p class="mission-text">
+      Identifier, inspecter et homologuer les établissements dignes d'intérêt brassicole
+      pour le bénéfice de la communauté. Chaque bar est une zone d'opération potentielle.
+      Chaque pinte est un élément de preuve. Le Comité statue.
+    </p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number" data-target="47">0</span>
+        <span class="stat-label">Bars validés</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-target="21">0</span>
+        <span class="stat-label">Missions réalisées</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-target="138">0</span>
+        <span class="stat-label">Audits houblonnés</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" data-target="63">0</span>
+        <span class="stat-label">Happy Hours certifiées</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOCOLE -->
+<section id="protocole">
+  <div class="container">
+    <p class="section-title">// PROCÉDURE STANDARD CVB //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:2rem;">Protocole de Validation</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 01</span>
+        <h3 class="step-title">Inspection du comptoir</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Évaluation de la propreté, de l'équipement et de la disposition tactique.</p>
+        <span class="step-icon">🔍</span>
+      </div>
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 02</span>
+        <h3 class="step-title">Test de pression</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Analyse du débit, de la mousse et de la température de service.</p>
+        <span class="step-icon">🍺</span>
+      </div>
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 03</span>
+        <h3 class="step-title">Analyse houblonnée</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Catalogage des références disponibles. Notation organoleptique.</p>
+        <span class="step-icon">🌿</span>
+      </div>
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 04</span>
+        <h3 class="step-title">Évaluation de l'ambiance</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Indice de convivialité, acoustique, et potentiel de repli.</p>
+        <span class="step-icon">📡</span>
+      </div>
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 05</span>
+        <h3 class="step-title">Délibération du comité</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Session à huis clos. Vote à bulletin houblonné.</p>
+        <span class="step-icon">⚖️</span>
+      </div>
+      <div class="step-card">
+        <span class="step-number">ÉTAPE 06</span>
+        <h3 class="step-title">Homologation officielle</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Émission du certificat de validation. Inscription aux archives.</p>
+        <span class="step-icon">✅</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRADES -->
+<section id="grades">
+  <div class="container">
+    <p class="section-title">// HIÉRARCHIE DES AGENTS //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:2rem;">Grades Opérationnels</h2>
+    <div class="grades-list">
+      <div class="grade-item">
+        <span class="grade-rank">GRADE I</span>
+        <div class="grade-bar"><div class="grade-bar-fill" style="width:20%"></div></div>
+        <span class="grade-name">Aspirant Dégustateur</span>
+      </div>
+      <div class="grade-item">
+        <span class="grade-rank">GRADE II</span>
+        <div class="grade-bar"><div class="grade-bar-fill" style="width:40%"></div></div>
+        <span class="grade-name">Contrôleur Brassicole</span>
+      </div>
+      <div class="grade-item">
+        <span class="grade-rank">GRADE III</span>
+        <div class="grade-bar"><div class="grade-bar-fill" style="width:60%"></div></div>
+        <span class="grade-name">Auditeur Houblonné</span>
+      </div>
+      <div class="grade-item">
+        <span class="grade-rank">GRADE IV</span>
+        <div class="grade-bar"><div class="grade-bar-fill" style="width:80%"></div></div>
+        <span class="grade-name">Inspecteur Principal des Débits de Boisson</span>
+      </div>
+      <div class="grade-item">
+        <span class="grade-rank">GRADE V</span>
+        <div class="grade-bar"><div class="grade-bar-fill" style="width:100%"></div></div>
+        <span class="grade-name">Grand Maître de la Validation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RAPPORT -->
+<section id="rapport">
+  <div class="container">
+    <p class="section-title">// RAPPORT D'INSPECTION — CVB CLASSIFIED //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:2rem;">Rapport de mission</h2>
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-dot"></div>
+        <span class="terminal-title">CVB-TERMINAL v2.6 — ACCÈS NIVEAU 4 — SESSION ACTIVE</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">MISSION_ID</span>
+        <span class="terminal-val val-ok">CVB-013</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">ÉTABLISSEMENT</span>
+        <span class="terminal-val val-redacted">█████████</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">LOCALISATION</span>
+        <span class="terminal-val val-redacted">████████████</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">DATE_OPÉRATION</span>
+        <span class="terminal-val val-ok">CONFIDENTIELLE</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">AMBIANCE</span>
+        <span class="terminal-val val-ok">VALIDÉE</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">PRESSION</span>
+        <span class="terminal-val val-ok">CONFORME</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">HOUBLON</span>
+        <span class="terminal-val val-ok">CERTIFIÉ</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">HAPPY_HOUR</span>
+        <span class="terminal-val val-ok">OPTIMISÉE</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-key">OPÉRATEURS</span>
+        <span class="terminal-val val-redacted">████ █████ ████</span>
+      </div>
+      <div class="terminal-verdict">▶ VALIDÉ ◀</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHIVES -->
+<section id="archives">
+  <div class="container">
+    <p class="section-title">// DOSSIERS ARCHIVÉS — ACCÈS RESTREINT //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:2rem;">Archives des Missions</h2>
+    <div class="archives-grid">
+      <div class="archive-card">
+        <span class="archive-id">MISSION CVB-001</span>
+        <h3 class="archive-title">Premier bar homologué</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin:0.5rem 0 0.75rem;">Établissement fondateur. Condition de validation historique.</p>
+        <span class="archive-status">STATUT : HOMOLOGUÉ ✓</span>
+      </div>
+      <div class="archive-card">
+        <span class="archive-id">MISSION CVB-007</span>
+        <h3 class="archive-title">Audit Happy Hour</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin:0.5rem 0 0.75rem;">Inspection approfondie des créneaux horaires à tarifs réduits.</p>
+        <span class="archive-status">STATUT : OPTIMISÉ ✓</span>
+      </div>
+      <div class="archive-card">
+        <span class="archive-id">MISSION CVB-013</span>
+        <h3 class="archive-title">Cas pratique DGCCRF</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin:0.5rem 0 0.75rem;">Dossier sensible. Contenu partiellement expurgé.</p>
+        <span class="archive-status">STATUT : CLASSIFIÉ ██</span>
+      </div>
+      <div class="archive-card">
+        <span class="archive-id">MISSION CVB-021</span>
+        <h3 class="archive-title">Validation exceptionnelle</h3>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin:0.5rem 0 0.75rem;">Procédure d'urgence déclenchée. Conditions exceptionnelles.</p>
+        <span class="archive-status">STATUT : EXCEPTIONNEL ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCHAINE MISSION -->
+<section id="mission-next">
+  <div class="container">
+    <p class="section-title">// ORDRE DE MISSION — PRIORITÉ HAUTE //</p>
+    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem); margin-bottom:2rem;">Prochaine Mission</h2>
+    <div class="mission-card">
+      <div class="mission-card-header">
+        <span class="mission-badge">ORDRE DE MISSION</span>
+        <span class="mission-status-badge">▶ PLANIFIÉE</span>
+      </div>
+      <h3 class="mission-card-title glow">MISSION CVB-014</h3>
+      <p class="mission-card-subtitle">Inspection terrain — Nouveau débit de boissons</p>
+      <div class="mission-meta">
+        <div class="mission-meta-item">
+          <span class="meta-icon">📅</span>
+          <div>
+            <span class="meta-label">Date opération</span>
+            <span class="meta-value">09/06 — 19h00</span>
+          </div>
+        </div>
+        <div class="mission-meta-item">
+          <span class="meta-icon">📍</span>
+          <div>
+            <span class="meta-label">Zone d'intervention</span>
+            <span class="meta-value">Porh Ainc</span>
+          </div>
+        </div>
+      </div>
+      <p class="mission-desc">
+        Mission officielle du Comité de Validation de la Bière.<br/>
+        Inspection, analyse houblonnée et validation éventuelle de l'établissement.<br/>
+        Présence de l'équipe terrain requise. Tenue de circonstance conseillée.
+      </p>
+      <a href="https://maps.app.goo.gl/Na7yM8PZzg4vwaS26" target="_blank" rel="noopener" class="btn btn-primary">
+        📍 &nbsp;Ouvrir dans Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DGCCRF EASTER EGG -->
+<section id="dgccrf">
+  <div class="dgccrf-inner">
+    <span class="dgccrf-tag">// ANNEXE DGCCRF — DOCUMENT INTERNE NON DIFFUSABLE //</span>
+    @Jay, est-ce que ça compte comme un cas pratique DGCCRF ?
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CVB</div>
+  <p class="footer-tagline">Beer Validation Division</p>
+  <p style="font-size:0.75rem;color:var(--green-dim);letter-spacing:0.2em;font-style:italic;">In Hops We Trust</p>
+  <div class="footer-sep"></div>
+  <p style="font-size:0.7rem;color:var(--text-dim);letter-spacing:0.15em;">Est. 2026</p>
+  <div class="footer-sep"></div>
+  <p class="footer-mentions">
+    Organisation indépendante de validation brassicole.<br/>
+    Toute ressemblance avec une administration réelle serait purement fortuite.<br/>
+    <span style="opacity:0.5;font-size:0.65rem;">Site non affilié à Niantic ni à Ingress. Création communautaire humoristique.</span>
+  </p>
+</footer>
+
+<script>
+  // Counter animation
+  function animateCounters() {
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      const duration = 1500;
+      const step = 16;
+      const increment = target / (duration / step);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = Math.floor(current);
+      }, step);
+    });
+  }
+
+  // Trigger counters when mission section enters viewport
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounters();
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const missionSection = document.getElementById('mission');
+  if (missionSection) observer.observe(missionSection);
+</script>
+
+</body>
+</html>
