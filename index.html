@@ -805,23 +805,27 @@
   if (ms) observer.observe(ms);
 
   // ── TERMINAL TYPING ──────────────────────────────────────────────
+  function runTerminal(el) {
+    const lines   = el.querySelectorAll('.t-line');
+    const verdict = el.querySelector('.t-verdict');
+    lines.forEach((line, i) => {
+      setTimeout(() => {
+        line.classList.add('t-show');
+        lines.forEach(l => l.classList.remove('t-cursor'));
+        if (i < lines.length - 1) line.classList.add('t-cursor');
+      }, 200 + i * 160);
+    });
+    if (verdict) setTimeout(() => verdict.classList.add('t-show'), 200 + lines.length * 160 + 200);
+  }
+
   const termObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
-      const lines   = e.target.querySelectorAll('.t-line');
-      const verdict = e.target.querySelector('.t-verdict');
-      lines.forEach((line, i) => {
-        setTimeout(() => {
-          line.classList.add('t-show');
-          // curseur clignotant sur la dernière ligne active
-          lines.forEach(l => l.classList.remove('t-cursor'));
-          if (i < lines.length - 1) line.classList.add('t-cursor');
-        }, 200 + i * 160);
-      });
-      if (verdict) setTimeout(() => verdict.classList.add('t-show'), 200 + lines.length * 160 + 200);
+      runTerminal(e.target);
       termObs.disconnect();
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
   const term = document.querySelector('.terminal-mini');
   if (term) termObs.observe(term);
 
